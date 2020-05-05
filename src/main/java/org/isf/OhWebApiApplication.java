@@ -22,8 +22,8 @@ import java.util.Optional;
 
 @EnableSwagger2
 @SpringBootApplication
-@ComponentScan(basePackages = {"org.isf"}, excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = {org.isf.utils.db.JpaConfig.class})})
 @EnableAspectJAutoProxy(proxyTargetClass = true)
+@ComponentScan(basePackages = {"org.isf"}, excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = {org.isf.utils.db.JpaConfig.class})})
 public class OhWebApiApplication implements WebMvcConfigurer {
 
 	public static void main(String[] args) {
@@ -32,7 +32,7 @@ public class OhWebApiApplication implements WebMvcConfigurer {
 
 	@Bean
 	public AuditorAware<String> auditorAware() {
-		return () -> Optional.of("admin");
+		return () -> Optional.of("webapi");
 	}
 
 	@Bean
