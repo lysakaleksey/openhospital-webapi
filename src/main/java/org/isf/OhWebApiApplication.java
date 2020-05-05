@@ -4,8 +4,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -14,14 +18,21 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import static springfox.documentation.builders.PathSelectors.regex;
+import java.util.Optional;
 
 @EnableSwagger2
-@SpringBootApplication()
+@SpringBootApplication
+@ComponentScan(basePackages = {"org.isf"}, excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = {org.isf.utils.db.JpaConfig.class})})
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 public class OhWebApiApplication implements WebMvcConfigurer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(OhWebApiApplication.class, args);
+	}
+
+	@Bean
+	public AuditorAware<String> auditorAware() {
+		return () -> Optional.of("admin");
 	}
 
 	@Bean
@@ -45,7 +56,7 @@ public class OhWebApiApplication implements WebMvcConfigurer {
 	}
 
 	@Override
-	public void addViewControllers (ViewControllerRegistry registry) {
+	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addRedirectViewController("/", "/swagger-ui.html");
 	}
 
