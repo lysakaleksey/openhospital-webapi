@@ -7,6 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.data.domain.AuditorAware;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -24,15 +25,20 @@ import java.util.Optional;
 @SpringBootApplication
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @ComponentScan(basePackages = {"org.isf"}, excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = {org.isf.utils.db.JpaConfig.class})})
-public class OhWebApiApplication implements WebMvcConfigurer {
+public class OhWebApplication implements WebMvcConfigurer {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OhWebApiApplication.class, args);
+		SpringApplication.run(OhWebApplication.class, args);
 	}
 
 	@Bean
 	public AuditorAware<String> auditorAware() {
 		return () -> Optional.of("webapi");
+	}
+
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 	@Bean
@@ -57,7 +63,8 @@ public class OhWebApiApplication implements WebMvcConfigurer {
 
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addRedirectViewController("/", "/swagger-ui.html");
+		registry.addRedirectViewController("/", "/home");
+		registry.addRedirectViewController("/docs", "/swagger-ui.html");
 	}
 
 }
