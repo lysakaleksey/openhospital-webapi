@@ -31,20 +31,9 @@ public class DefaultController {
 		User user = userService.findByUserName(auth.getName());
 
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("userName", "Welcome " + user.getUserName() + "/" + user.getUserName() + " " + user.getDesc() + " (" + user.getUserGroupName() + ")");
-		mv.addObject("adminMessage", "Content Available Only for Users with Admin/Guest Role");
+		mv.addObject("userName", "Welcome " + user.getUserName());
 		mv.setViewName("home");
 		return mv;
-	}
-
-	@GetMapping("/admin")
-	public String admin() {
-		return "/admin";
-	}
-
-	@GetMapping("/guest")
-	public String guest() {
-		return "/guest";
 	}
 
 	@GetMapping("/403")

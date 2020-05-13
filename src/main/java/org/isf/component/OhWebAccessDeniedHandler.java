@@ -19,9 +19,8 @@ public class OhWebAccessDeniedHandler implements AccessDeniedHandler {
 	@Override
 	public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException ex) throws IOException {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		System.out.println("auth = " + auth);
 		if (auth != null) {
-			logger.info(auth.getName() + " was trying to access protected resource: " + request.getRequestURI());
+			logger.warn(auth.getName() + " was trying to access protected resource: " + request.getRequestURI());
 		}
 		response.sendRedirect(request.getContextPath() + "/403");
 	}

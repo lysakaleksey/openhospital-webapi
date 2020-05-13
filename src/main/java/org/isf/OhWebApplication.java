@@ -66,5 +66,4 @@ public class OhWebApplication implements WebMvcConfigurer {
 		registry.addRedirectViewController("/", "/home");
 		registry.addRedirectViewController("/docs", "/swagger-ui.html");
 	}
-
 }
