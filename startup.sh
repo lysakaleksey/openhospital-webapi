@@ -8,4 +8,4 @@ if [ -z $JAVA_HOME ]; then
   JAVA_EXE=java
 fi
 
-$JAVA_EXE -jar OH-web-2.0.1.jar --spring.config.location=rsc/application.properties
+$JAVA_EXE -jar OH-web.jar --spring.config.location=rsc/application.properties

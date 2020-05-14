@@ -16,4 +16,4 @@ REM Java.exe already in path at this moment
 set JAVA=java.exe
 
 @echo on
-start /min %JAVA% -jar OH-web-2.0.1.jar --spring.config.location=rsc/application.properties
+start /min %JAVA% -jar OH-web.jar --spring.config.location=rsc/application.properties

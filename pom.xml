@@ -226,7 +226,7 @@
                             <Class-Path>.</Class-Path>
                         </manifestEntries>
                     </archive>
-                    <finalName>OpenHospital20/OH-web-${project.version}</finalName>
+                    <finalName>OpenHospital20/OH-web</finalName>
                 </configuration>
             </plugin>
         </plugins>
