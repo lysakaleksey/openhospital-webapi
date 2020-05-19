@@ -26,6 +26,10 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
@@ -148,7 +152,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/OpenHospital20/rsc</outputDirectory>
+                            <outputDirectory>${basedir}/target/OHWeb/rsc</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>rsc</directory>
@@ -163,7 +167,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/OpenHospital20/lib</outputDirectory>
+                            <outputDirectory>${basedir}/target/OHWeb/lib</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>lib</directory>
@@ -178,7 +182,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/OpenHospital20</outputDirectory>
+                            <outputDirectory>${basedir}/target/OHWeb</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>${basedir}</directory>
@@ -203,7 +207,7 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/OpenHospital20/lib</outputDirectory>
+                            <outputDirectory>${project.build.directory}/OHWeb/lib</outputDirectory>
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
@@ -226,7 +230,7 @@
                             <Class-Path>.</Class-Path>
                         </manifestEntries>
                     </archive>
-                    <finalName>OpenHospital20/OH-web</finalName>
+                    <finalName>OHWeb/OH-web</finalName>
                 </configuration>
             </plugin>
         </plugins>
