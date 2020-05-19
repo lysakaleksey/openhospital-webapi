@@ -39,9 +39,9 @@ public class PatPresController {
 	}
 
 	@PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public PatientPresentation update(@RequestBody PatientPresentation request, @PathVariable Integer id) {
+	public PatientPresentation update(@RequestBody PatientPresentation request, @PathVariable int id) {
 		Patient patient = findPatient(request);
-
+		id = id > 0 ? id : -1; //0 is reserved
 		PatientPresentation patPres = patPresRepo.findById(id).orElse(new PatientPresentation());
 		if (patPres.getPatient() == null) {
 			patPres.setPatient(patient);

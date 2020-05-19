@@ -2,13 +2,10 @@ package org.isf.controller;
 
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/v1/api/patient")
@@ -25,36 +22,39 @@ public class PatientController {
 	}
 
 	@PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public Patient update(@RequestBody Patient p, @PathVariable Integer id) {
-		return repository.findById(id)
-			.map(e -> {
-				e.setFirstName(p.getFirstName());
-				e.setSecondName(p.getSecondName());
-				e.setBirthDate(p.getBirthDate());
-				e.setAge(p.getAge());
-				e.setAgetype(p.getAgetype());
-				e.setSex(p.getSex());
-				e.setAddress(p.getAddress());
-				e.setCity(p.getCity());
-				e.setNextKin(p.getNextKin());
-				e.setTelephone(p.getTelephone());
-				e.setNote(p.getNote());
-				e.setMother_name(p.getMother_name());
-				e.setMother(p.getMother());
-				e.setFather_name(p.getFather_name());
-				e.setFather(p.getFather());
-				e.setBloodType(p.getBloodType());
-				e.setHasInsurance(p.getHasInsurance());
-				e.setParentTogether(p.getParentTogether());
-				e.setTaxCode(p.getTaxCode());
-				e.setMaritalStatus(p.getMaritalStatus());
-				e.setProfession(p.getProfession());
-
-				return repository.save(e);
+	public ResponseEntity<?> update(@RequestBody Patient request, @PathVariable int id) {
+		id = id > 0 ? id : -1; //0 is reserved
+		HttpStatus status = repository.findById(id)
+			.map(record -> {
+				record.setFirstName(request.getFirstName());
+				record.setSecondName(request.getSecondName());
+				record.setBirthDate(request.getBirthDate());
+				record.setAge(request.getAge());
+				record.setAgetype(request.getAgetype());
+				record.setSex(request.getSex());
+				record.setAddress(request.getAddress());
+				record.setCity(request.getCity());
+				record.setNextKin(request.getNextKin());
+				record.setTelephone(request.getTelephone());
+				record.setNote(request.getNote());
+				record.setMother_name(request.getMother_name());
+				record.setMother(request.getMother());
+				record.setFather_name(request.getFather_name());
+				record.setFather(request.getFather());
+				record.setBloodType(request.getBloodType());
+				record.setHasInsurance(request.getHasInsurance());
+				record.setParentTogether(request.getParentTogether());
+				record.setTaxCode(request.getTaxCode());
+				record.setMaritalStatus(request.getMaritalStatus());
+				record.setProfession(request.getProfession());
+				repository.save(record);
+				return HttpStatus.OK;
 			})
 			.orElseGet(() -> {
-				p.setCode(id);
-				return repository.save(p);
+				request.setCode(null);
+				repository.save(request);
+				return HttpStatus.CREATED;
 			});
+		return new ResponseEntity<>(status);
 	}
 }
