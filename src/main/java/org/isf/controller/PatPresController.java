@@ -1,24 +1,23 @@
 package org.isf.controller;
 
+import io.swagger.annotations.*;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patpres.model.PatientPresentation;
 import org.isf.patpres.service.PatPresIoOperationRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.validation.Valid;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequestMapping("/v1/api/patpres")
+@Api(tags = "Patient Presentation API", description = "Patient Presentation")
 public class PatPresController {
 	private final PatPresIoOperationRepository patPresRepo;
 	private final PatientIoOperationRepository patientRepo;
@@ -28,40 +27,78 @@ public class PatPresController {
 		this.patientRepo = patientRepo;
 	}
 
+	@ApiOperation(value = "Retrieve all patient presentation records")
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<PatientPresentation> findAll() {
+		return patPresRepo.findAll();
+	}
+
+	@ApiOperation(value = "Retrieve patient presentation by id")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "id", value = "Patient Presentation Id", dataType = "int", paramType = "path", required = true, example = "0")
+	})
+	@ApiResponses(value = {
+		@ApiResponse(code = 200, message = "Patient Presentation Data", response = PatientPresentation.class),
+		@ApiResponse(code = 500, message = "Internal Server Error")
+	})
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public PatientPresentation getById(@PathVariable Integer id) {
-		return patPresRepo.findById(id).orElse(null);
+	public ResponseEntity<PatientPresentation> findById(@PathVariable Integer id) {
+		PatientPresentation result = patPresRepo.findById(id).orElse(null);
+		return result != null ? new ResponseEntity<>(result, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
+	@ApiOperation(value = "Retrieve patient presentation by patient's id")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "code", value = "Patient Id", dataType = "int", paramType = "path", required = true, example = "0")
+	})
+	@ApiResponses(value = {
+		@ApiResponse(code = 200, message = "Patient Presentation Data", response = PatientPresentation.class, responseContainer = "List"),
+		@ApiResponse(code = 500, message = "Internal Server Error")
+	})
 	@GetMapping(value = "/patient/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<PatientPresentation> findByPatientCode(@PathVariable int code) {
-		return patPresRepo.findByPatientCode(code);
+	public ResponseEntity<List<PatientPresentation>> findByPatientCode(@PathVariable int code) {
+		List<PatientPresentation> result = patPresRepo.findByPatientCode(code);
+		return result != null ? new ResponseEntity<>(result, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
+	@ApiOperation(value = "Create/Update Patient Presentation")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "id", value = "Patient Presentation Id. Pass '0' for create action", dataType = "int", paramType = "path", required = true, example = "0")
+	})
+	@ApiResponses(value = {
+		@ApiResponse(code = 200, message = "Patient Presentation Updated"),
+		@ApiResponse(code = 201, message = "Patient Presentation Created"),
+		@ApiResponse(code = 500, message = "Internal Server Error")
+	})
 	@PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public PatientPresentation update(@RequestBody PatientPresentation request, @PathVariable int id) {
-		Patient patient = findPatient(request);
+	public ResponseEntity<?> save(@RequestBody PatientPresentation request, @PathVariable int id) {
+		HttpStatus status = HttpStatus.OK;
 		id = id > 0 ? id : -1; //0 is reserved
-		PatientPresentation patPres = patPresRepo.findById(id).orElse(new PatientPresentation());
-		if (patPres.getPatient() == null) {
-			patPres.setPatient(patient);
+		PatientPresentation record = patPresRepo.findById(id).orElse(null);
+		if (record == null) {
+			Patient patient = findPatient(request);
+			record = new PatientPresentation();
+			record.setPatient(patient);
+			status = HttpStatus.CREATED;
 		}
-		patPres.setVitals(request.getVitals());
-		patPres.setPresentationDate(request.getPresentationDate());
-		patPres.setConsultationEnd(request.getConsultationEnd());
-		patPres.setPreviousConsult(request.getPreviousConsult());
-		patPres.setReferredFrom(request.getReferredFrom());
-		patPres.setPatientAilmentDescription(request.getPatientAilmentDescription());
-		patPres.setDoctorsAilmentDescription(request.getDoctorsAilmentDescription());
-		patPres.setSpecificSymptoms(request.getSpecificSymptoms());
-		patPres.setDiagnosis(request.getDiagnosis());
-		patPres.setPrognosis(request.getPrognosis());
-		patPres.setPatientAdvice(request.getPatientAdvice());
-		patPres.setPrescribed(request.getPrescribed());
-		patPres.setFollowUp(request.getFollowUp());
-		patPres.setReferredTo(request.getReferredTo());
-		patPres.setSummary(request.getSummary());
-		return patPresRepo.save(patPres);
+
+		record.setVitals(request.getVitals());
+		record.setPresentationDate(request.getPresentationDate());
+		record.setConsultationEnd(request.getConsultationEnd());
+		record.setPreviousConsult(request.getPreviousConsult());
+		record.setReferredFrom(request.getReferredFrom());
+		record.setPatientAilmentDescription(request.getPatientAilmentDescription());
+		record.setDoctorsAilmentDescription(request.getDoctorsAilmentDescription());
+		record.setSpecificSymptoms(request.getSpecificSymptoms());
+		record.setDiagnosis(request.getDiagnosis());
+		record.setPrognosis(request.getPrognosis());
+		record.setPatientAdvice(request.getPatientAdvice());
+		record.setPrescribed(request.getPrescribed());
+		record.setFollowUp(request.getFollowUp());
+		record.setReferredTo(request.getReferredTo());
+		record.setSummary(request.getSummary());
+		patPresRepo.save(record);
+		return new ResponseEntity<>(status);
 	}
 
 	private Patient findPatient(PatientPresentation request) {
@@ -82,15 +119,15 @@ public class PatPresController {
 				return patient;
 		}
 
-		if (StringUtils.isEmpty(firstName) || StringUtils.isEmpty(secondName) || birthDate == null || sex == 0) {
+		if (StringUtils.isEmpty(firstName) || StringUtils.isEmpty(secondName) || birthDate == null || sex == 0)
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough patient fields provided. Either one is empty: first name, second name, birth date, sex");
-		}
 
 		// Otherwise find by combination of fields
 		List<Patient> patients = patientRepo.findAllByFilter(firstName, secondName, birthDate, sex);
 		if (patients == null || patients.size() == 0)
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No patients found matching the data");
-		else if (patients.size() > 1)
+
+		if (patients.size() > 1)
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "More than one patients found for given data");
 
 		return patients.get(0);
