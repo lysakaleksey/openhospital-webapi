@@ -5,7 +5,7 @@
 * Make sure the `java` is available in the system `PATH`. Start command terminal and type `java -version` in order to check whether it is available or not.
 
 == Install MySQL
-* Install MySQL Server v5.7. Use https://downloads.mysql.com/archives/get/p/25/file/mysql-installer-community-5.7.29.0.msi.
+* Install MySQL Server v5.7. Use https://dev.mysql.com/get/Downloads/MySQLInstaller/mysql-installer-community-5.7.30.0.msi.
 * Please set MySQL service name to `MySQL` during installation. 
 * Make sure MySQL is up & running on `3306` port. Use `mysql -u root -p` in order to check whether you can login or not.
 
