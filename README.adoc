@@ -37,7 +37,93 @@
 * If the above does not work, please check the log files in `C:\Programs\OHWeb`.
 
 == OH Web API Usage
-Please open http://localhost:8080/docs endpoint and go through API Endpoints how to use
- 
+Please open http://localhost:8080/docs endpoint and go through API Endpoints how to use.
 
+== OH Web API Payload Examples
 
+=== 1. Create Patient Presentation. Patient referenced by patient code
+API METHOD:
+[source]
+----
+PUT http://localhost:8080/v1/api/patpres/0
+----
+Payload example:
+[source]
+----
+{
+    "consultationEnd": "2020-05-22",
+    "diagnosis": "string",
+    "doctorsAilmentDescription": "string",
+    "followUp": "string",
+    "patient": {
+        "code": 5
+    },
+    "patientAdvice": "string",
+    "patientAilmentDescription": "string",
+    "prescribed": "string",
+    "presentationDate": "2020-05-22",
+    "previousConsult": "2020-05-22",
+    "prognosis": "string",
+    "referredFrom": "string",
+    "referredTo": "string",
+    "specificSymptoms": "string",
+    "summary": "string",
+    "vitals": {
+        "bloodSugar": 10,
+        "bp": {
+            "diastole": 100,
+            "systole": 200
+        },
+        "bsUnit": "string",
+        "height": 0,
+        "tempUnit": "string",
+        "temperature": 0,
+        "weight": 0
+    }
+}
+----
+
+=== 2. Create Patient Presentation. Patient referenced by fields (first name, second name, birth date, sex)
+API METHOD:
+[source]
+----
+PUT http://localhost:8080/v1/api/patpres/0
+----
+Oayload example:
+[source]
+----
+{
+    "consultationEnd": "2020-05-22",
+    "diagnosis": "string",
+    "doctorsAilmentDescription": "string",
+    "followUp": "string",
+    "patient": {
+        "firstName": "Onyal",
+        "secondName": "Jenety",
+        "birthDate": "1990-05-13",
+        "sex": "F"
+    },
+    "patientAdvice": "string",
+    "patientAilmentDescription": "string",
+    "prescribed": "string",
+    "presentationDate": "2020-05-22",
+    "previousConsult": "2020-05-22",
+    "prognosis": "string",
+    "referredFrom": "string",
+    "referredTo": "string",
+    "specificSymptoms": "string",
+    "summary": "string",
+    "vitals": {
+        "bloodSugar": 10,
+        "bp": {
+            "diastole": 100,
+            "systole": 200
+        },
+        "bsUnit": "string",
+        "height": 0,
+        "tempUnit": "string",
+        "temperature": 0,
+        "weight": 0
+    }
+}
+----
